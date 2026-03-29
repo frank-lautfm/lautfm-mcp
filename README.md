@@ -39,6 +39,8 @@ Add the server to your MCP client configuration (e.g. Claude Desktop `claude_des
 }
 ```
 
+Generate a token by calling https://radioadmin.laut.fm/login?callback_url=LautfmMCP
+
 ## Environment Variables
 
 | Variable | Required | Description |
