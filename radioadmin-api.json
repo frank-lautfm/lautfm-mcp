@@ -1,0 +1,3312 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "laut.fm Radioadmin-Api",
+        "description": "Dies ist eine nach bestem Wissen erstellte Dokumentation der laut.fm-Radioadmin-API. Wir werden sie auch in Zukunft aktualisieren, wenn wir Unregelmäßigkeiten feststellen oder neue Endpunkte hinzufügen bzw. bestehende Endpunkte verändern.\n\nDie bisherige Version der Dokumentation mit anklickbaren Links findet ihr immer noch <a href=\"https://radioadmin.laut.fm/api-browser.html>hier</a>. Allerdings werden wir diese Dokumentation hier vermutlich häufiger aktualisieren.\n",
+        "version": "1.0.1"
+    },
+    "servers": [{
+            "url": "https://api.radioadmin.laut.fm"
+        }
+    ],
+    "tags": [{
+            "name": "General"
+        }, {
+            "name": "Station"
+        }, {
+            "name": "Live"
+        }, {
+            "name": "Images"
+        }, {
+            "name": "Schedule"
+        }, {
+            "name": "Playlists"
+        }, {
+            "name": "Tracks"
+        }, {
+            "name": "Automation Algorithms"
+        }, {
+            "name": "App"
+        }
+    ],
+    "paths": {
+        "/server_status": {
+            "get": {
+                "summary": "Api Status",
+                "tags": ["General"],
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "running": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/automation_algorithms/{name}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/AlgorithmName"
+                }
+            ],
+            "get": {
+                "summary": "View Automation Algorithm",
+                "description": "View the definition of a specific automation algorithm\n",
+                "tags": ["Automation Algorithms"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AutomationAlgorithm"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Create Automation Algorithm",
+                "description": "Add an automation algorithm for shuffling tracks\n",
+                "tags": ["Automation Algorithms"],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AutomationAlgorithmRequest"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AutomationAlgorithm"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400BadRequest"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update Automation Algorithm",
+                "description": "Update the function used when shuffling tracks\n",
+                "tags": ["Automation Algorithms"],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AutomationAlgorithmRequest"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AutomationAlgorithm"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Automation Algorithm",
+                "description": "Delete an automation Algorithm\n",
+                "tags": ["Automation Algorithms"],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204Deleted"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations": {
+            "get": {
+                "summary": "All Stations",
+                "tags": ["Station"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Station"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "get": {
+                "summary": "Station Information",
+                "tags": ["Station"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update Station Information",
+                "tags": ["Station"],
+                "requestBody": {
+                    "description": "You may pass a body object containing one or more of the `key: value` pairs from the schema.\n\nNote that in this example you should **delete** any `key: value` you do not want to update.\n",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Station"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "delete": {
+                "security": [{
+                        "JWT": []
+                    }
+                ],
+                "tags": ["App"],
+                "summary": "Delete App Station",
+                "description": "Delete an app station",
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204Deleted"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/users": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "get": {
+                "summary": "Get Station Users",
+                "description": "List of all users of a station",
+                "tags": ["Users"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "_links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "self": {
+                                                    "$ref": "#/components/schemas/UserLink"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add Station User",
+                "description": "Add a user with a given role to a station",
+                "tags": ["Users"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "invitation sent"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/users/{user_id}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }, {
+                    "$ref": "#/components/parameters/UserId"
+                }
+            ],
+            "patch": {
+                "summary": "Update Station User Role",
+                "description": "Change the role of a user",
+                "tags": ["Users"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "role": {
+                                        "$ref": "#/components/schemas/UserRole"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove Station User",
+                "description": "Remove a user from a station",
+                "tags": ["Users"],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204Deleted"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/playlists": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "get": {
+                "summary": "Get all Playlists",
+                "description": "List of all playlists for a station",
+                "tags": ["Playlists"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "playlists": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Playlist"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add Playlist",
+                "description": "Add a new playlist to a station",
+                "tags": ["Playlists"],
+                "requestBody": {
+                    "description": "You must provide at least:\n  - name\n  - color (in a full hex digit format not the shortened version)\n",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Playlist"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Playlist"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/playlists/{playlist_id}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }, {
+                    "$ref": "#/components/parameters/PlaylistId"
+                }
+            ],
+            "get": {
+                "summary": "Get Playlist Information",
+                "description": "Get information for a single playlist for a station",
+                "tags": ["Playlists"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [{
+                                            "$ref": "#/components/schemas/Playlist"
+                                        }, {
+                                            "type": "object",
+                                            "properties": {
+                                                "entries": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/PlaylistEntry"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update Playlist",
+                "description": "Modify an existing playlist for a station",
+                "tags": ["Playlists"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Playlist"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Playlist"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add Track to Playlist",
+                "description": "Append a single track to the playlist.\n\nThis endpoint will not allow the addition of tracks which are already present in the playlist.\n\nIf a track is appended to the currently scheduled playlist, the appended track will be buffered into the stream at the next available buffering opportunity.\n",
+                "tags": ["Playlists"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "track_id": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Playlist"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Playlist",
+                "description": "Delete a single playlist for a station. The rotation playlist can not be deleted",
+                "tags": ["Playlists"],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204Deleted"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/playlists/{playlist_id}/tracks": {
+            "get": {
+                "summary": "Get Playlist Tracks",
+                "description": "All tracks for a playlist. Note that tracks are unique and not (necessarily) in the playlist order\n",
+                "tags": ["Playlists"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }, {
+                        "$ref": "#/components/parameters/PlaylistId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [{
+                                            "type": "object",
+                                            "properties": {
+                                                "tracks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Track"
+                                                    }
+                                                }
+                                            }
+                                        }, {
+                                            "$ref": "#/components/schemas/PagingInfo"
+                                        }, {
+                                            "type": "object",
+                                            "properties": {
+                                                "_links": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "self": {
+                                                            "$ref": "#/components/schemas/TracksLink"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/playlists/{playlist_id}/entries/{track_id}": {
+            "delete": {
+                "summary": "Delete Track from Playlist",
+                "description": "Delete all occurences of the track from the playlist",
+                "tags": ["Playlists"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }, {
+                        "$ref": "#/components/parameters/PlaylistId"
+                    }, {
+                        "$ref": "#/components/parameters/TrackId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [{
+                                            "$ref": "#/components/schemas/Playlist"
+                                        }, {
+                                            "type": "object",
+                                            "properties": {
+                                                "entries": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/PlaylistEntry"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/images/{image_type}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }, {
+                    "name": "image_type",
+                    "required": true,
+                    "in": "path",
+                    "schema": {
+                        "type": "string",
+                        "enum": ["logo", "website", "background"]
+                    }
+                }
+            ],
+            "get": {
+                "summary": "Get Image",
+                "description": "get the station image with the given type",
+                "tags": ["Images"],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/200Success"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Image",
+                "description": "Upload an image of a given type for a station\n\nWe accept JPEGs, PNGs and GIFs\n",
+                "tags": ["Images"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        },
+                        "image/jpeg": {
+                            "schema": {
+                                "type": "string",
+                                "format": "binary"
+                            }
+                        },
+                        "image/png": {
+                            "schema": {
+                                "type": "string",
+                                "format": "binary"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/200Success"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/schedule": {
+            "get": {
+                "summary": "Schedule",
+                "tags": ["Schedule"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Schedule"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Modify Schedule",
+                "description": "You can not add an entry for the Base Playlist into entries. Additionally, if you change the base playlist ID, any entries containing that ID will be deleted.\n",
+                "tags": ["Schedule"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Schedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Schedule"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "get": {
+                "summary": "Track Search",
+                "description": "We have attempted to document and test this endpoint as well as possible; however, due to it's nature we can not guarantee that all parameters works as expected or that there are not parameters missing. This endpoint has been deprecated. It will be replaced in a future version.\n",
+                "deprecated": true,
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "name": "own",
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "private",
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "release_year",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "min_release_year",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "max_release_year",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "type",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "artist",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "title",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "album",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "genre",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "created_at",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "min_created_at",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "max_created_at",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "playlist",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "duration",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "min_duration",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "max_duration",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }, {
+                        "name": "order",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "tracks": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Track"
+                                            }
+                                        },
+                                        "_paging": {
+                                            "type": "object",
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "next_page": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        },
+                                        "_links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "self": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "href": {
+                                                            "type": "string",
+                                                            "example": "/stations/{station_id}/tracks{query_params}"
+                                                        }
+                                                    }
+                                                },
+                                                "next": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "href": {
+                                                            "type": "string",
+                                                            "example": "/stations/{station_id}/tracks{query_params}&page={page_num}"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Upload MP3",
+                "tags": ["Tracks"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TrackUpload"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackUpload"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/{track_ids}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "get": {
+                "summary": "Tracks Information",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "name": "track_ids",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "array",
+                            "minItems": 1,
+                            "default": [1],
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "description": "comma separated list of ids"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [{
+                                            "type": "object",
+                                            "properties": {
+                                                "tracks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Track"
+                                                    }
+                                                }
+                                            }
+                                        }, {
+                                            "$ref": "#/components/schemas/PagingInfo"
+                                        }, {
+                                            "type": "object",
+                                            "properties": {
+                                                "_links": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "self": {
+                                                            "$ref": "#/components/schemas/TrackIdLinks"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/{track_id}": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "patch": {
+                "summary": "Update Tracks Information",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "name": "track_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Track"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Track"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Own Track",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "name": "track_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/stats": {
+            "get": {
+                "summary": "Current Day Track Statistics",
+                "description": "Get information about when a track was played, how many listeners listened to it, as well as if it was sent live in addition to general track metadata of the current day\n",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TrackStat"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/stats/{period}": {
+            "get": {
+                "summary": "Period Track Statistics",
+                "description": "Get information about when a track was played, how many listeners listened to it, as well as if it was sent live in addition to general track metadata.\n",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }, {
+                        "name": "period",
+                        "description": "allowed values are `24h` or a date in the form `yyyy-mm-dd`\n",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TrackStat"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/{track_ids}/tags": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }, {
+                    "name": "track_ids",
+                    "required": true,
+                    "in": "path",
+                    "schema": {
+                        "type": "array",
+                        "minItems": 1,
+                        "default": [1],
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "description": "comma separated list of ids"
+                }
+            ],
+            "get": {
+                "summary": "Tags",
+                "tags": ["Tracks"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackTags"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add Tags",
+                "tags": ["Tracks"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "tags": {
+                                        "$ref": "#/components/schemas/TrackTags"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [{
+                                            "type": "object",
+                                            "properties": {
+                                                "tracks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Track"
+                                                    }
+                                                }
+                                            }
+                                        }, {
+                                            "$ref": "#/components/schemas/PagingInfo"
+                                        }, {
+                                            "type": "object",
+                                            "properties": {
+                                                "_links": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "self": {
+                                                            "$ref": "#/components/schemas/TrackIdLinks"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove Tags",
+                "tags": ["Tracks"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "tags": {
+                                        "$ref": "#/components/schemas/TrackTags"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [{
+                                            "type": "object",
+                                            "properties": {
+                                                "tracks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Track"
+                                                    }
+                                                }
+                                            }
+                                        }, {
+                                            "$ref": "#/components/schemas/PagingInfo"
+                                        }, {
+                                            "type": "object",
+                                            "properties": {
+                                                "_links": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "self": {
+                                                            "$ref": "#/components/schemas/TrackIdLinks"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/{track_id}/prelisten": {
+            "get": {
+                "summary": "Prelisten",
+                "description": "Listen to a portion of a track as cut by Laut FM for determining the quality and verify it is the track you want.\nThe Version with query strings is intended to be used for providing the prelisten _without_ having to authenticate to the radioadmin.\n",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }, {
+                        "$ref": "#/components/parameters/TrackId"
+                    }, {
+                        "name": "x",
+                        "description": "Expiration Time (as a unix timestamp)",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }, {
+                        "name": "t",
+                        "description": "Authorization Token (generated by the server)",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "hash"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "audio/mpeg": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks/tags": {
+            "get": {
+                "summary": "Tags",
+                "tags": ["Tracks"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrackTags"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks;incomplete": {
+            "get": {
+                "tags": ["Tracks"],
+                "summary": "Incomplete Track Uploads",
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "tracks": {
+                                            "type": "array",
+                                            "items": {
+                                                "allOf": [{
+                                                        "$ref": "#/components/schemas/Track"
+                                                    }, {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "original_filename": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "_paging": {
+                                            "type": "object",
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        },
+                                        "_links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "self": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "href": {
+                                                            "type": "string",
+                                                            "example": "/stations/{station_id}/tracks;incomplete"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/tracks;queued": {
+            "get": {
+                "tags": ["Tracks"],
+                "summary": "Queued Track Uploads",
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "tracks": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TrackUpload"
+                                            }
+                                        },
+                                        "_paging": {
+                                            "type": "object",
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        },
+                                        "_links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "self": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "href": {
+                                                            "type": "string",
+                                                            "example": "/stations/{station_id}/tracks;queued"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/live": {
+            "get": {
+                "summary": "Connection Information",
+                "tags": ["Live"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LiveResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/live/password": {
+            "get": {
+                "summary": "Password",
+                "tags": ["Live"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/current_playlist": {
+            "get": {
+                "summary": "Current Playlist",
+                "tags": ["Station"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "playlist_info": {
+                                            "$ref": "#/components/schemas/PlaylistInfo"
+                                        },
+                                        "tracks": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/PlaylistInfoTrack"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/stats": {
+            "get": {
+                "summary": "Listener Stats",
+                "tags": ["Station"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "listeners_now": {
+                                            "type": "integer"
+                                        },
+                                        "position_now": {
+                                            "type": "integer"
+                                        },
+                                        "switchons_log": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "integer"
+                                            },
+                                            "maxProperties": 15,
+                                            "example": {
+                                                "2023-01-01": 3,
+                                                "2023-01-02": 2
+                                            },
+                                            "description": "`keys` are dates of the format `yyyy-mm-dd`\n"
+                                        },
+                                        "tlh_log": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "integer"
+                                            },
+                                            "maxProperties": 15,
+                                            "example": {
+                                                "2023-01-01": 3,
+                                                "2023-01-02": 2
+                                            },
+                                            "description": "`keys` are dates of the format `yyyy-mm-dd`\n"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/stations/{station_id}/state": {
+            "parameters": [{
+                    "$ref": "#/components/parameters/StationId"
+                }
+            ],
+            "get": {
+                "summary": "Is Active",
+                "description": "Indicates if the station is active and playing on a streaming server",
+                "tags": ["Station"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "active": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Activate",
+                "description": "Will trigger a playlist export (in all cases) and start a station on a streaming server if it is assigned to one and not currently running\n",
+                "tags": ["Station"],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "active": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404NotFound"
+                    }
+                }
+            }
+        },
+        "/verify_jwt/station/{station_id}": {
+            "head": {
+                "security": [{
+                        "JWT": []
+                    }
+                ],
+                "tags": ["App"],
+                "parameters": [{
+                        "$ref": "#/components/parameters/StationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    }
+                }
+            }
+        },
+        "/unknown_app_user/display_name_to_station_name": {
+            "post": {
+                "description": "used to generate a station name derived from a display name and to validate this station name may be used for as-you-type feedback to the user endpoint is only available to previously unknown app users\n",
+                "security": [{
+                        "JWT": []
+                    }
+                ],
+                "tags": ["App"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "display_name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "display_name": {
+                                            "type": "string"
+                                        },
+                                        "generated_name": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "display_name": {
+                                            "type": "string"
+                                        },
+                                        "generated_name": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "too short or not enough valid characters"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403Forbidden"
+                    },
+                    "409": {
+                        "description": "Record Exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "display_name": {
+                                            "type": "string"
+                                        },
+                                        "generated_name": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "requested name already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "509": {
+                        "description": "Limit Exceeded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "daily station limit on server exceeded"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/unknown_app_user/stations": {
+            "post": {
+                "security": [{
+                        "JWT": []
+                    }
+                ],
+                "tags": ["App"],
+                "description": "used create a new station with a name derived from the given display name also creates a local FirebaseUser with the Firebase ID provided by the Firebase Token endpoint is only available to previously unknown app users\n",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "display_name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "display_name": {
+                                            "type": "string"
+                                        },
+                                        "generated_name": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Record Exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "display_name": {
+                                            "type": "string"
+                                        },
+                                        "generated_name": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "requested name already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "daily station limit on server exceeded"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "509": {
+                        "description": "Limit Exceeded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "daily station limit on server exceeded"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "description": "<p>Login using the Radioadmin-API <a id=\"auth-link\" href='#'>here</a></p>\n",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "Radioadmin"
+            },
+            "JWT": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "parameters": {
+            "AlgorithmName": {
+                "name": "name",
+                "required": true,
+                "in": "path",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "StationId": {
+                "name": "station_id",
+                "description": "Station Id",
+                "required": true,
+                "in": "path",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "UserId": {
+                "name": "user_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "PlaylistId": {
+                "name": "playlist_id",
+                "required": true,
+                "in": "path",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "TrackId": {
+                "name": "track_id",
+                "required": true,
+                "in": "path",
+                "schema": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schemas": {
+            "CreatedAt": {
+                "type": "object",
+                "properties": {
+                    "created_at": {
+                        "readOnly": true,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "UpdatedAt": {
+                "type": "object",
+                "properties": {
+                    "updated_at": {
+                        "readOnly": true,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "TimeStamps": {
+                "allOf": [{
+                        "$ref": "#/components/schemas/CreatedAt"
+                    }, {
+                        "$ref": "#/components/schemas/UpdatedAt"
+                    }
+                ]
+            },
+            "AutomationAlgorithm": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "readOnly": true
+                            },
+                            "body": {
+                                "type": "string",
+                                "example": "(function(tracks){return tracks.reverse()})"
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "readOnly": true,
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/automation_algorithm/{name}"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "messages": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserRole": {
+                "type": "string",
+                "enum": ["owner", "editor", "dj"]
+            },
+            "Station": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "name": {
+                                "type": "string",
+                                "readOnly": true
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "format": {
+                                "type": "string"
+                            },
+                            "djs": {
+                                "type": "string"
+                            },
+                            "logo_image_url": {
+                                "type": "string",
+                                "readOnly": true,
+                                "nullable": true
+                            },
+                            "background_image_url": {
+                                "type": "string",
+                                "readOnly": true,
+                                "nullable": true
+                            },
+                            "website_image_url": {
+                                "type": "string",
+                                "readOnly": true,
+                                "nullable": true
+                            },
+                            "location": {
+                                "type": "string"
+                            },
+                            "lat": {
+                                "type": "number",
+                                "readOnly": true
+                            },
+                            "lng": {
+                                "type": "number",
+                                "readOnly": true
+                            },
+                            "active": {
+                                "type": "boolean",
+                                "readOnly": true
+                            },
+                            "website": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "twitter_name": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "facebook_page": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "instagram_name": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "role": {
+                                "allOf": [{
+                                        "readOnly": true
+                                    }, {
+                                        "$ref": "#/components/schemas/UserRole"
+                                    }
+                                ]
+                            },
+                            "genres": {
+                                "type": "array",
+                                "maxItems": 3,
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "streamingserver": {
+                                "readOnly": true,
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "type": "object",
+                                "readOnly": true,
+                                "properties": {
+                                    "self": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}"
+                                            }
+                                        }
+                                    },
+                                    "users": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/users"
+                                            }
+                                        }
+                                    },
+                                    "playlists": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/playlists"
+                                            }
+                                        }
+                                    },
+                                    "schedule": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/schedule"
+                                            }
+                                        }
+                                    },
+                                    "image_logo": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/images/logo"
+                                            }
+                                        }
+                                    },
+                                    "image_background": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/images/background"
+                                            }
+                                        }
+                                    },
+                                    "image_website": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/images/website"
+                                            }
+                                        }
+                                    },
+                                    "tracks": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks"
+                                            }
+                                        }
+                                    },
+                                    "track_stats": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/stats"
+                                            }
+                                        }
+                                    },
+                                    "tracks_stats_24": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/stats/24h"
+                                            }
+                                        }
+                                    },
+                                    "tracks_stats_archive": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/stats/{yyyy-mm-dd}"
+                                            }
+                                        }
+                                    },
+                                    "tracks_by_ids": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/stats/0,1,2"
+                                            }
+                                        }
+                                    },
+                                    "track_tags": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/tags"
+                                            }
+                                        }
+                                    },
+                                    "incomplete_tracks": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks;incomplete"
+                                            }
+                                        }
+                                    },
+                                    "queued_tracks": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks;queued"
+                                            }
+                                        }
+                                    },
+                                    "live": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/live"
+                                            }
+                                        }
+                                    },
+                                    "current_playlist": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/current_playlist"
+                                            }
+                                        }
+                                    },
+                                    "stats": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/stats"
+                                            }
+                                        }
+                                    },
+                                    "logs": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/logs"
+                                            }
+                                        }
+                                    },
+                                    "state": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/state"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "User": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "name": {
+                                "type": "string",
+                                "readOnly": true
+                            },
+                            "surname": {
+                                "type": "string",
+                                "readOnly": true
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "$ref": "#/components/schemas/UserRole"
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "readOnly": true,
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "type": "string",
+                                        "example": "/stations/{station_id}/users/{user_id}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "UserLink": {
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "example": "/stations/{station_id}/users"
+                    }
+                }
+            },
+            "Playlist": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "user_id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "updated_by": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "station_id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "title": {
+                                "type": "string",
+                                "default": null
+                            },
+                            "description": {
+                                "type": "string",
+                                "default": null
+                            },
+                            "color": {
+                                "type": "string",
+                                "default": "",
+                                "pattern": "#[a-fA-F0-9]{6}"
+                            },
+                            "shuffled": {
+                                "type": "boolean"
+                            },
+                            "shuffle_function": {
+                                "deprecated": true,
+                                "type": "string",
+                                "default": null
+                            },
+                            "shuffle_opts": {
+                                "type": "object",
+                                "default": {}
+                            },
+                            "size": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "duration": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "automation_algorithm_name": {
+                                "type": "string",
+                                "readOnly": true
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "readOnly": true,
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/playlists/{playlist_id}"
+                                            }
+                                        }
+                                    },
+                                    "tracks": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/playlists/{playlist_id}/tracks"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "AddedAt": {
+                "type": "object",
+                "properties": {
+                    "added_at": {
+                        "readOnly": true,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "PlaylistEntry": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "track_id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "added_by": {
+                                "type": "integer",
+                                "readOnly": true
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/AddedAt"
+                    }
+                ]
+            },
+            "TrackTags": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "default": []
+            },
+            "BaseTrack": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "artist": {
+                                "type": "string"
+                            },
+                            "genre": {
+                                "type": "string",
+                                "default": null
+                            },
+                            "tags": {
+                                "$ref": "#/components/schemas/TrackTags"
+                            },
+                            "release_year": {
+                                "type": "integer"
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }
+                ]
+            },
+            "TrackIdLinks": {
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "example": "/stations/{station_id}/tracks/{track_ids}"
+                    }
+                }
+            },
+            "Track": {
+                "allOf": [{
+                        "$ref": "#/components/schemas/BaseTrack"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "private": {
+                                "type": "boolean",
+                                "readOnly": true
+                            },
+                            "own": {
+                                "type": "boolean",
+                                "readOnly": true
+                            },
+                            "album": {
+                                "type": "string"
+                            },
+                            "duration": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "release_month": {
+                                "type": "integer",
+                                "default": null
+                            },
+                            "release_day": {
+                                "type": "integer",
+                                "default": null
+                            },
+                            "playlist_ids": {
+                                "type": "array",
+                                "readOnly": true,
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            "popularity": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "deletable": {
+                                "type": "boolean",
+                                "readOnly": true
+                            },
+                            "can_be_private": {
+                                "type": "boolean",
+                                "readOnly": true
+                            },
+                            "_links": {
+                                "readOnly": true,
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "$ref": "#/components/schemas/TrackIdLinks"
+                                    },
+                                    "tags": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/{track_id}/tags"
+                                            }
+                                        }
+                                    },
+                                    "prelisten": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/{track_id}/prelisten"
+                                            }
+                                        }
+                                    },
+                                    "prelisten_authless": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/tracks/{track_id}/prelisten?x={int}&t={hash}"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "PagingInfo": {
+                "type": "object",
+                "properties": {
+                    "_paging": {
+                        "type": "object",
+                        "properties": {
+                            "total_pages": {
+                                "type": "integer"
+                            },
+                            "total_entries": {
+                                "type": "integer"
+                            },
+                            "current_page": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            },
+            "TracksLink": {
+                "properties": {
+                    "href": {
+                        "type": "string",
+                        "example": "/stations/{station_id}/tracks"
+                    }
+                }
+            },
+            "ScheduleEntry": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "playlist_id": {
+                                "type": "integer"
+                            },
+                            "slot": {
+                                "type": "integer"
+                            },
+                            "duration": {
+                                "type": "integer"
+                            },
+                            "added_by": {
+                                "type": "integer",
+                                "readOnly": true
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/AddedAt"
+                    }
+                ]
+            },
+            "Schedule": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "station_id": {
+                                "type": "integer",
+                                "readOnly": true
+                            },
+                            "base_playlist_id": {
+                                "type": "integer"
+                            },
+                            "entries": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ScheduleEntry"
+                                }
+                            },
+                            "updated_by": {
+                                "readOnly": true,
+                                "type": "integer"
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "readOnly": true,
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/schedule"
+                                            }
+                                        }
+                                    },
+                                    "events": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "example": "/stations/{station_id}/schedule/events"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "TrackUpload": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "readOnly": true,
+                                "type": "integer",
+                                "description": "This will be a negative integer indicating that it has not yet been processed.\n\nThis negative integer can be polled via the `/stations/{station_id}/tracks/{track_ids}` endpoint to determine when it has been processed.\n"
+                            },
+                            "track": {
+                                "writeOnly": true,
+                                "type": "string",
+                                "format": "binary"
+                            },
+                            "original_filename": {
+                                "type": "string",
+                                "readOnly": true
+                            },
+                            "private": {
+                                "type": "boolean"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/TimeStamps"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "readOnly": true,
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "$ref": "#/components/schemas/TrackIdLinks"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "TrackStat": {
+                "allOf": [{
+                        "$ref": "#/components/schemas/BaseTrack"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "artist": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "started_at": {
+                                "type": "string"
+                            },
+                            "ends_at": {
+                                "type": "string"
+                            },
+                            "listeners": {
+                                "type": "integer"
+                            },
+                            "live": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                ]
+            },
+            "LiveResponse": {
+                "type": "object",
+                "properties": {
+                    "protocol": {
+                        "type": "string",
+                        "enum": ["http", "https"]
+                    },
+                    "server": {
+                        "type": "string"
+                    },
+                    "port": {
+                        "type": "integer"
+                    },
+                    "mountpoint": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "bitrate": {
+                        "type": "integer"
+                    },
+                    "samplerate": {
+                        "type": "integer"
+                    },
+                    "format": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "active": {
+                        "type": "boolean"
+                    },
+                    "_links": {
+                        "readOnly": true,
+                        "type": "object",
+                        "properties": {
+                            "self": {
+                                "type": "object",
+                                "properties": {
+                                    "href": {
+                                        "type": "string",
+                                        "example": "/stations/{station_id}/live"
+                                    }
+                                }
+                            },
+                            "password": {
+                                "type": "object",
+                                "properties": {
+                                    "href": {
+                                        "type": "string",
+                                        "example": "/stations/{station_id}/password"
+                                    }
+                                }
+                            },
+                            "log": {
+                                "type": "object",
+                                "properties": {
+                                    "href": {
+                                        "type": "string",
+                                        "example": "/stations/{station_id}/log"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "PlaylistInfo": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "shuffle_function": {
+                        "type": "string",
+                        "deprecated": true
+                    },
+                    "shuffled": {
+                        "type": "boolean"
+                    },
+                    "shuffle_opts": {
+                        "type": "object"
+                    },
+                    "start_time": {
+                        "type": "string"
+                    },
+                    "mysql_time": {
+                        "type": "number"
+                    },
+                    "total_time": {
+                        "type": "number"
+                    },
+                    "reason": {
+                        "type": "string"
+                    },
+                    "auto_ad_triggers": {
+                        "type": "boolean"
+                    },
+                    "shuffle_time": {
+                        "type": "number"
+                    }
+                }
+            },
+            "PlaylistInfoTrack": {
+                "allOf": [{
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "album": {
+                                "type": "string",
+                                "default": null
+                            },
+                            "length": {
+                                "type": "integer"
+                            },
+                            "duration": {
+                                "type": "integer"
+                            },
+                            "genre": {
+                                "type": "string"
+                            },
+                            "releaseyear": {
+                                "type": "integer",
+                                "default": null
+                            },
+                            "release_year": {
+                                "type": "integer",
+                                "default": null
+                            },
+                            "release_month": {
+                                "type": "integer",
+                                "default": null
+                            },
+                            "release_day": {
+                                "type": "integer",
+                                "default": null
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/CreatedAt"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "tags": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "artist": {
+                                "type": "string"
+                            },
+                            "next_artists": {
+                                "type": "array",
+                                "minItems": 3,
+                                "maxItems": 3,
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }, {
+                        "$ref": "#/components/schemas/AddedAt"
+                    }, {
+                        "type": "object",
+                        "properties": {
+                            "from_playlist": {
+                                "type": "integer",
+                                "default": null
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "responses": {
+            "404NotFound": {
+                "description": "Not Found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "message": "Record not found. Note that this also could be a record where you don't have the access rights with this access token."
+                        }
+                    }
+                }
+            },
+            "400BadRequest": {
+                "description": "BadRequest",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        }
+                    }
+                }
+            },
+            "204Deleted": {
+                "description": "The specified resource as deleted"
+            },
+            "403Forbidden": {
+                "description": "Forbidden",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "message": "The user is not a member of this station or no valid membership given"
+                        }
+                    }
+                }
+            },
+            "200Success": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "url": {
+                                    "type": "string"
+                                },
+                                "_links": {
+                                    "readOnly": true,
+                                    "type": "object",
+                                    "properties": {
+                                        "self": {
+                                            "type": "object",
+                                            "properties": {
+                                                "href": {
+                                                    "type": "string",
+                                                    "example": "/stations/{station_id}/images/{image_type}"
+                                                }
+                                            }
+                                        },
+                                        "station": {
+                                            "type": "object",
+                                            "properties": {
+                                                "href": {
+                                                    "type": "string",
+                                                    "example": "/stations/{station_id}"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "AutomationAlgorithmRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/AutomationAlgorithm"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [{
+            "bearerAuth": []
+        }, {
+            "JWT": []
+        }
+    ]
+}

@@ -1,0 +1,194 @@
+{
+  "manifest_version": "0.3",
+  "name": "lautfm-mcp",
+  "display_name": "laut.fm Radioadmin MCP",
+  "version": "1.0.0",
+  "description": "MCP server for the laut.fm Radioadmin API. Manage radio stations, playlists, tracks, schedules, users, live streaming, and automation algorithms.",
+  "author": {
+    "name": "LautfmMCP"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "LAUTFM_TOKEN": "${user_config.lautfm_token}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "get_server_status",
+      "description": "Check the laut.fm Radioadmin API server status"
+    },
+    {
+      "name": "list_stations",
+      "description": "List all stations accessible with the current token"
+    },
+    {
+      "name": "get_station",
+      "description": "Get detailed information about a specific station"
+    },
+    {
+      "name": "update_station",
+      "description": "Update station information (description, format, djs, location, website, twitter_name, facebook_page, instagram_name, genres)"
+    },
+    {
+      "name": "get_station_state",
+      "description": "Check if a station is active and playing on a streaming server"
+    },
+    {
+      "name": "activate_station",
+      "description": "Activate a station — triggers a playlist export and starts the station on a streaming server if assigned and not running"
+    },
+    {
+      "name": "get_current_playlist",
+      "description": "Get the currently playing playlist and its tracks for a station"
+    },
+    {
+      "name": "get_listener_stats",
+      "description": "Get listener statistics for a station (current listeners, position, switchons log, TLH log)"
+    },
+    {
+      "name": "get_station_users",
+      "description": "List all users of a station"
+    },
+    {
+      "name": "add_station_user",
+      "description": "Add a user with a given role to a station (sends an invitation)"
+    },
+    {
+      "name": "update_station_user_role",
+      "description": "Change the role of a user on a station"
+    },
+    {
+      "name": "remove_station_user",
+      "description": "Remove a user from a station"
+    },
+    {
+      "name": "get_playlists",
+      "description": "List all playlists for a station"
+    },
+    {
+      "name": "add_playlist",
+      "description": "Add a new playlist to a station"
+    },
+    {
+      "name": "get_playlist",
+      "description": "Get information for a single playlist including its entries"
+    },
+    {
+      "name": "update_playlist",
+      "description": "Modify an existing playlist for a station"
+    },
+    {
+      "name": "delete_playlist",
+      "description": "Delete a single playlist for a station. The rotation playlist cannot be deleted."
+    },
+    {
+      "name": "add_track_to_playlist",
+      "description": "Append a single track to a playlist. The track must not already be in the playlist."
+    },
+    {
+      "name": "get_playlist_tracks",
+      "description": "Get all tracks for a playlist (tracks are unique and not necessarily in playlist order)"
+    },
+    {
+      "name": "delete_track_from_playlist",
+      "description": "Delete all occurrences of a track from a playlist"
+    },
+    {
+      "name": "get_schedule",
+      "description": "Get the schedule for a station"
+    },
+    {
+      "name": "update_schedule",
+      "description": "Modify the schedule for a station"
+    },
+    {
+      "name": "search_tracks",
+      "description": "Search tracks for a station using various filters"
+    },
+    {
+      "name": "get_tracks_by_ids",
+      "description": "Get track information for one or more track IDs"
+    },
+    {
+      "name": "update_track",
+      "description": "Update metadata for a track"
+    },
+    {
+      "name": "delete_track",
+      "description": "Delete an own track from a station"
+    },
+    {
+      "name": "get_track_stats",
+      "description": "Get current day track statistics (play time, listener count, live flag) for a station"
+    },
+    {
+      "name": "get_track_stats_period",
+      "description": "Get track statistics for a specific period. Use '24h' for the last 24 hours or a date in 'yyyy-mm-dd' format."
+    },
+    {
+      "name": "get_track_tags_for_ids",
+      "description": "Get tags for one or more specific tracks"
+    },
+    {
+      "name": "add_track_tags",
+      "description": "Add tags to one or more tracks"
+    },
+    {
+      "name": "remove_track_tags",
+      "description": "Remove tags from one or more tracks"
+    },
+    {
+      "name": "get_all_track_tags",
+      "description": "Get all tags used across all tracks for a station"
+    },
+    {
+      "name": "get_incomplete_tracks",
+      "description": "Get tracks with incomplete uploads for a station"
+    },
+    {
+      "name": "get_queued_tracks",
+      "description": "Get tracks that are queued for processing for a station"
+    },
+    {
+      "name": "get_live_connection_info",
+      "description": "Get live streaming connection information for a station (server, port, mountpoint, bitrate, samplerate, format, etc.)"
+    },
+    {
+      "name": "get_live_password",
+      "description": "Get the live streaming password for a station"
+    },
+    {
+      "name": "get_automation_algorithm",
+      "description": "View the definition of a specific automation algorithm"
+    },
+    {
+      "name": "create_automation_algorithm",
+      "description": "Create a new automation algorithm for shuffling tracks"
+    },
+    {
+      "name": "update_automation_algorithm",
+      "description": "Update the function used by an existing automation algorithm"
+    },
+    {
+      "name": "delete_automation_algorithm",
+      "description": "Delete an automation algorithm"
+    }
+  ],
+  "tools_generated": false,
+  "user_config": {
+    "lautfm_token": {
+      "type": "string",
+      "title": "laut.fm API Token",
+      "description": "Your laut.fm Radioadmin API bearer token. You can find this in your laut.fm account settings.",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "license": "MIT"
+}
